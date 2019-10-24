@@ -54,20 +54,12 @@ header("Content-type: Text/Plain");
 header("Connection: Close");
 
 //No parameters, assume using a browser
-if (empty($_GET)) { header("Location: ui.php"); die(); }
+if (empty($_GET)) { header("Location: /"); die(); }
 
 //Make sure we have something to use as a key
 if (!isset($_GET['key'])) {
 	$_GET['key'] = '';
 }
-
-/*
-$r = array();
-for($i=0; $i!=50; $i++) {
-	$r[] = array('', '1337', sha1(rand().rand().rand(), true));
-}
-die(track($r, 0, 0));
-*/
 
 //Inputs that are needed, do not continue without these
 valdata('peer_id', true);
@@ -189,15 +181,6 @@ $reply = array(); //To be encoded and sent to the client
 foreach($q->fetchAll() as $r) { //Runs for every client with the same infohash
 	$reply[] = array($r[1], $r[2], $r[3]); //ip, port, peerid
 }
-
-//Ugly solution
-/*
-$q = mysql_query("SELECT count(*) FROM ".__DB_TABLE." WHERE infoHash='".mysql_real_escape_string(bin2hex($_GET['info_hash']))."' AND isSeed=1 AND peerId!='".mysql_real_escape_string(bin2hex($_GET['peer_id']))."'") or die(track('Error selecting: '.mysql_error()));
-$seeders = mysql_fetch_array($q);
-
-$q = mysql_query("SELECT count(*) FROM ".__DB_TABLE." WHERE infoHash='".mysql_real_escape_string(bin2hex($_GET['info_hash']))."' AND isSeed=0 AND peerId!='".mysql_real_escape_string(bin2hex($_GET['peer_id']))."'") or die(track('Error selecting: '.mysql_error()));
-$leechers = mysql_fetch_array($q);
-*/
 
 try {
 	$d = array(
